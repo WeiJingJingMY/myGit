@@ -13,7 +13,8 @@
         <input type="text" v-model="inputValue">
         <button v-on:click="handleBtnClick">提交</button>
         <ul>
-            <li v-for="item in list">{{item}}</li>
+            <!-- <li v-for="item in list">{{item}}</li> -->
+            <todo-item :content="item" :index="index" v-for="(item,index) in list" @delete="handleItemDelete"></todo-item>
         </ul>
     </div>
     <script>
@@ -32,8 +33,27 @@
         // setTimeout(function() {
         //     app.$data.content = 'Bye World'
         // }, 2000)
+
+        // *全局注册组件化
+        // Vue.component("TodoItem", {
+        //     props: ['content'],
+        //     template: "<li>{{content}}</li>"
+        // });
+        var TodoItem = {
+            props: ['content', 'index'],
+            template: "<li @click='handleItemClick'>{{content}}</li>",
+            methods: {
+                handleItemClick: function() {
+                    this.$emit("delete", this.index);
+                }
+            }
+        }
+
         var app = new Vue({
             el: '#app',
+            components: {
+                TodoItem: TodoItem
+            },
             data: {
                 list: [],
                 inputValue: ''
@@ -42,6 +62,9 @@
                 handleBtnClick: function() {
                     this.list.push(this.inputValue)
                     this.inputValue = ''
+                },
+                handleItemDelete: function(index) {
+                    this.list.splice(index, 1)
                 }
             },
         })
