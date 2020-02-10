@@ -10,14 +10,24 @@
 
 <body>
     <div id="root">
-        {{message}}
+        <div v-on:click="handleClick">{{message}}</div>
+        <item></item>
     </div>
     <script>
+        Vue.component('item', {
+            template: '<div>hello World</div>'
+        })
+
         var vm = new Vue({
             el: '#root',
             data: {
                 message: 'hello world'
-            }
+            },
+            methods: {
+                handleClick: function() {
+                    alert("hello")
+                }
+            },
         })
     </script>
 </body>
